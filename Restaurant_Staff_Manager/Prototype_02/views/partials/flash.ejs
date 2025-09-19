@@ -1,0 +1,10 @@
+<% if (successFlash && successFlash.length > 0) { %>
+    <div style="padding: 0 20px; margin-top: 10px;">
+        <div class="flash success"><%= successFlash %></div>
+    </div>
+<% } %>
+<% if (errorFlash && errorFlash.length > 0) { %>
+    <div style="padding: 0 20px; margin-top: 10px;">
+        <div class="flash danger"><%= errorFlash %></div>
+    </div>
+<% } %>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/head', { title: title }) %> 
+</head>
+<body>
+    <%- include('../partials/navbar') %> 
+    <%- include('../partials/flash', { successFlash: successFlash, errorFlash: errorFlash }) %> 
+
+    <div class="content-wrapper">
+        <h2><%= title %></h2> 
+
+        <p style="margin-top: 15px; margin-bottom: 15px;">
+            <a href="/admin/employee/add" class="btn btn-primary">Add New Employee</a>
+        </p>
+
+        <div class="my-4" style="margin-top: 20px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #ccc;">
+            <h3>Generate Schedule</h3>
+            <p>Generate required shifts based on forecast (existing shifts in the period will be replaced).</p>
+            <form action="/admin/generate-schedule" method="POST" style="display: inline-block;">
+                <button type="submit" class="btn btn-success">Generate Schedule for the Month</button>
+            </form>
+        </div>
+
+        <div class="my-4" style="margin-top: 20px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #ccc;">
+            <h3>Assign Employees</h3>
+            <p>Assign employees to unassigned shifts for the current calendar month based on position match, avoiding overlaps and respecting 40h/week limit.</p> <form action="/admin/assign-schedule" method="POST" style="display: inline-block;">
+                 <button type="submit" class="btn btn-info">Assign Employees for Current Month</button>
+            </form>
+        </div>
+
+        <%# Check if the employees variable exists and has data %>
+        <% if (typeof employees !== 'undefined' && employees.length > 0) { %>
+            <table class="schedule-table" border="1"> 
+                <thead>
+                    <tr style="background-color: #f2f2f2;">
+                        <th>Name</th>
+                        <th>Position</th>
+                        <th>Email</th>
+                        <th style="text-align: right;">Hourly Rate</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%# Loop through each employee object passed from the route %>
+                    <% employees.forEach(employee => { %>
+                        <tr>
+                            <td><%= employee.name %></td>
+                            <td><%= employee.position %></td>
+                            <td><%= employee.email %></td>
+                            <td style="text-align: right;">
+                                <%# Display formatted rate or '-' if missing/null %>
+                                <% if (typeof employee.hourly_rate !== 'undefined' && employee.hourly_rate !== null) { %>
+                                    $<%= employee.hourly_rate.toFixed(2) %>
+                                <% } else { %>
+                                    -
+                                <% } %>
+                            </td>
+                            <td>
+                                <a href="/admin/employee/edit/<%= employee._id %>" style="margin-right: 10px;">Edit</a>
+                                
+                                <form action="/admin/employee/delete/<%= employee._id %>"
+                                      method="post"
+                                      style="display: inline;"
+                                      onsubmit="return confirm('Are you SURE you want to delete employee <%= employee.name %>?');">
+                                    <button type="submit" class="btn btn-danger btn-sm" style="background-color: #dc3545; border-color: #dc3545; padding: 0.2rem 0.4rem; font-size: 0.8rem; cursor:pointer;">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        <% } else { %>
+            <p>No employees found in the database yet.</p>
+        <% } %>
+
+         <hr style="margin-top: 20px;">
+         <p><a href="/">Back to Home</a></p> 
+
+    </div> 
+
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/head', { title: title }) %>
+
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+    <%- include('../partials/flash', { successFlash: successFlash, errorFlash: errorFlash }) %>
+
+    <div class="content-wrapper">
+        <h2><%= title %></h2>
+
+        <%# Display validation errors if they exist %>
+        <% if(typeof errors !== 'undefined' && errors && errors.length > 0) { %>
+            <div class="alert alert-danger" role="alert">
+                <strong>Please correct the following errors:</strong>
+                <ul>
+                    <% errors.forEach(err => { %>
+                        <li><%= err.msg %></li>
+                    <% }); %>
+                </ul>
+            </div>
+        <% } %>
+
+        <form action="/admin/performance/add" method="POST">
+
+            <div class="form-group">
+                <label for="employee">Employee*:</label>
+                <select id="employee" name="employee" required>
+                    <option value="">-- Select Employee --</option>
+                    <% if(typeof employees !== 'undefined' && employees.length > 0) { %>
+                        <% employees.forEach(emp => { %>
+                            <option value="<%= emp._id %>" <%= (typeof log !== 'undefined' && log.employee && log.employee == emp._id.toString()) ? 'selected' : '' %>>
+                                <%= emp.name %> (<%= emp.position %>)
+                            </option>
+                        <% }); %>
+                    <% } %>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="log_date">Date of Review/Period End*:</label>
+                <%# Default to today's date if not provided %>
+                <% const defaultDate = (typeof log !== 'undefined' && log.log_date) ? log.log_date : new Date().toISOString().split('T')[0]; %>
+                <input type="date" id="log_date" name="log_date" value="<%= defaultDate %>" required>
+            </div>
+
+            <div class="form-group">
+                <label>Rating (Optional):</label>
+                <div class="rating-group">
+                    <% [1, 2, 3, 4, 5].forEach(num => { %>
+                        <label>
+                            <input type="radio" name="rating" value="<%= num %>" <%= (typeof log !== 'undefined' && log.rating == num) ? 'checked' : '' %>>
+                            <%= num %>
+                        </label>
+                    <% }); %>
+                     <label>
+                            <input type="radio" name="rating" value="" <%= (typeof log === 'undefined' || !log.rating) ? 'checked' : '' %>>
+                           (N/A)
+                        </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="notes">Notes (Optional):</label>
+                <textarea id="notes" name="notes"><%= (typeof log !== 'undefined' && log.notes) ? log.notes : '' %></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save Performance Log</button>
+            <a href="/admin/employees" class="btn btn-secondary">Cancel</a>
+
+        </form>
+    </div>
+
+</body>
+</html>

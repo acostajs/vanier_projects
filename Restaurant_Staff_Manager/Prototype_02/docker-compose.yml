@@ -1,0 +1,19 @@
+services:
+
+  web:
+
+    container_name: prototype_02
+    build: .
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    volumes:
+      - ./src:/app/src                     
+      - ./public:/app/public               
+      - ./views:/app/views                 
+      - ./data:/app/data                   
+      - ./python_scripts:/app/python_scripts
+      - /app/node_modules
+
+    command: npm run dev

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <%- include('../partials/head', { title: title }) %>
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+    <%- include('../partials/flash', { successFlash: typeof successFlash !== 'undefined' ? successFlash : [], errorFlash: typeof errorFlash !== 'undefined' ? errorFlash : [] }) %>
+
+    <div class="content-wrapper">
+        <h2><%= title %></h2> 
+
+        <%# Display validation errors if passed from the route %>
+        <% if (typeof errors !== 'undefined' && errors.length > 0) { %>
+            <div style="color: red; border: 1px solid red; padding: 10px; margin-bottom: 15px;">
+                <strong>Please correct the following errors:</strong>
+                <ul>
+                    <% errors.forEach(error => { %>
+                        <li><%= error.msg %> <% if (error.path) { %>(Field: <%= error.path %>)<% } %></li>
+                    <% }); %>
+                </ul>
+            </div>
+        <% } %>
+
+        <%# Form action is different for add vs edit %>
+        <% const formAction = typeof editMode !== 'undefined' && editMode ? `/admin/employee/edit/${employee._id}` : '/admin/employee/add'; %>
+
+        <form action="<%= formAction %>" method="post" novalidate>
+            
+            
+
+            <p>
+                <label for="name">Name:</label><br>
+                <input type="text" id="name" name="name" size="40" class="form-control"
+                       value="<%= typeof employee !== 'undefined' && employee.name ? employee.name : '' %>" required>
+            </p>
+            <div class="form-group">
+                <label for="position">Position*:</label>
+                <select id="position" name="position" required>
+                    <option value="">-- Select Position --</option>
+                    <% if (typeof positions !== 'undefined' && positions.length > 0) { %>
+                        <% positions.forEach(pos => { %>
+                            <option value="<%= pos %>"
+                                <%# Check if editing and this position matches employee's current position %>
+                                <% if (typeof employee !== 'undefined' && employee.position === pos) { %>
+                                    selected
+                                <% } %>
+                                >
+                                <%= pos %>
+                            </option>
+                        <% }); %>
+                    <% } %>
+                </select>
+                <%# Display specific error for position if available %>
+                <% if (typeof errors !== 'undefined' && errors) { %>
+                    <% const positionError = errors.find(e => e.path === 'position'); %>
+                    <% if (positionError) { %>
+                         <div class="error-message"><%= positionError.msg %></div>
+                    <% } %>
+                <% } %>
+            </div>
+             <p>
+                <label for="email">Email:</label><br>
+                <input type="email" id="email" name="email" size="40" class="form-control"
+                       value="<%= typeof employee !== 'undefined' && employee.email ? employee.email : '' %>" required>
+            </p>
+            <p>
+                <label for="hourly_rate">Hourly Rate ($):</label><br>
+                 <input type="number" id="hourly_rate" name="hourly_rate" class="form-control" size="10" step="0.01" min="0"
+                       value="<%= (typeof employee !== 'undefined' && employee.hourly_rate != null) ? employee.hourly_rate : '' %>">
+            </p>
+
+            <p><button type="submit" class="btn btn-primary">Save Employee</button></p>
+        </form>
+
+        <hr>
+        <p><a href="/admin/employees">Back to Employee List</a></p> 
+
+    </div> 
+
+</body>
+</html>

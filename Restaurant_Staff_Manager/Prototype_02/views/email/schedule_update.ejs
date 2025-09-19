@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Your Schedule for <%= locals.month || 'the upcoming period' %></title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.5; }
+        ul { list-style: none; padding: 0; }
+        li { margin-bottom: 5px; padding: 5px; background-color: #f4f4f4; border-left: 3px solid #ccc; }
+        .shift-time { font-weight: bold; }
+        .shift-details { margin-left: 10px; color: #555; }
+    </style>
+</head>
+<body>
+    <h1>Pozole Restaurant Schedule Update</h1>
+    <p>Hello <%= locals.name || 'Employee' %>,</p>
+    <p>Here is your assigned schedule for <%= locals.month || 'the upcoming period' %>:</p>
+
+    <% if (locals.shifts && locals.shifts.length > 0) { %>
+        <ul>
+            <%
+                // Sort shifts by date, then time for display
+                const sortedShifts = shifts.sort((a, b) => a.shift_date.getTime() - b.shift_date.getTime() || a.start_time.localeCompare(b.start_time));
+                const dateFormatter = new Intl.DateTimeFormat('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: '2-digit', timeZone: 'UTC' });
+            %>
+            <% sortedShifts.forEach(shift => { %>
+                <li>
+                   <span class="shift-time"><%= dateFormatter.format(new Date(shift.shift_date)) %>: <%= shift.start_time %> - <%= shift.end_time %></span>
+                   <span class="shift-details">(<%= shift.required_position %>)</span>
+                </li>
+            <% }); %>
+        </ul>
+    <% } else { %>
+        <p>You have no shifts assigned for this period.</p>
+    <% } %>
+
+    <p>Please contact your manager if you have any questions.</p>
+    <p>Thank you!</p>
+</body>
+</html>

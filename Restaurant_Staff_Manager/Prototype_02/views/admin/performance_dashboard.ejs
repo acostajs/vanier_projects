@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/head', { title: title }) %>
+
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+    <%- include('../partials/flash', { successFlash: successFlash, errorFlash: errorFlash }) %>
+
+    <div class="content-wrapper">
+        <h2><%= title %></h2>
+
+        <p style="margin-top: 15px; margin-bottom: 15px;">
+            <a href="/admin/performance/add" class="btn btn-primary">Log New Performance Review</a>
+        </p>
+
+        <% if (typeof logs !== 'undefined' && logs.length > 0) { %>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Employee</th>
+                        <th>Position</th>
+                        <th>Log Date</th>
+                        <th>Rating</th>
+                        <th style="width: 40%;">Notes</th>
+                        <th>Recorded At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%
+                        const dateFormatter = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit' });
+                        const dateTimeFormatter = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit', hour: 'numeric', minute:'2-digit', hour12: true });
+                    %>
+                    <% logs.forEach(log => { %>
+                        <tr>
+                            <td><%= log.employee ? log.employee.name : 'N/A' %></td>
+                            <td><%= log.employee ? log.employee.position : 'N/A' %></td>
+                            <td><%= dateFormatter.format(new Date(log.log_date)) %></td>
+                            <td><%= typeof log.rating !== 'undefined' ? log.rating + '/5' : 'N/A' %></td>
+                            <td class="notes"><%= log.notes || '' %></td>
+                            <td><%= log.recorded_at ? dateTimeFormatter.format(new Date(log.recorded_at)) : 'N/A' %></td>
+                            <%# TODO: Add Edit/Delete buttons later if needed %>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        <% } else { %>
+            <p>No performance logs found.</p>
+        <% } %>
+
+        <hr style="margin-top: 20px;">
+        <p><a href="/">Back to Home</a></p>
+        <p><a href="/admin/employees">Back to Employee Management</a></p>
+
+    </div>
+
+</body>
+</html>

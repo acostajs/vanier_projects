@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('./partials/head', { title: title }) %>
+    
+</head>
+<body>
+    <%- include('./partials/navbar') %>
+    <%- include('./partials/flash', { successFlash: successFlash, errorFlash: errorFlash }) %>
+
+    <div class="content-wrapper">
+        <h2><%= title %></h2>
+
+        <div class="monthly-total">
+            Total Estimated Labor Cost: $<%= monthlyTotalCost %>
+        </div>
+
+        <div class="calendar-nav">
+            <a href="/schedule?year=<%= navData.prevYear %>&month=<%= navData.prevMonth %>">&lt;&lt; Previous Month</a>
+            <strong><%= scheduleViewData.viewMonthStr %></strong>
+            <a href="/schedule?year=<%= navData.nextYear %>&month=<%= navData.nextMonth %>">Next Month &gt;&gt;</a>
+        </div>
+
+
+        <% if (scheduleViewData && scheduleViewData.weeks && scheduleViewData.weeks.length > 0) { %>
+            <table class="calendar-grid">
+                <thead>
+                    <tr>
+                        <th>Sun</th>
+                        <th>Mon</th>
+                        <th>Tue</th>
+                        <th>Wed</th>
+                        <th>Thu</th>
+                        <th>Fri</th>
+                        <th>Sat</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% scheduleViewData.weeks.forEach(week => { %>
+                        <tr>
+                            <% week.days.forEach(day => { %>
+                                <%# Add classes for styling based on day properties %>
+                                <td class="<%= !day.isCurrentMonth ? 'other-month' : '' %> <%= day.isToday ? 'today' : '' %>">
+                                    <span class="day-number"><%= day.dayOfMonth %></span>
+
+                                    <%# Display shifts for the day %>
+                                    <% if (day.shifts && day.shifts.length > 0) { %>
+                                        <% day.shifts.forEach(shift => { %>
+                                             <%
+                                                let shiftTypeClass = '';
+                                                if (shift.start_time === '10:00') { shiftTypeClass = 'shift-type-day'; }
+                                                else if (shift.start_time === '16:00') { shiftTypeClass = 'shift-type-eve'; }
+                                            %>
+                                            <div class="schedule-shift <%= shiftTypeClass %>" title="<%= shift.start_time %>-<%= shift.end_time %> | <%= shift.required_position %> | <%= shift.assigned_employee ? shift.assigned_employee.name : 'Unassigned' %> ($<%= shift.cost %>)">
+                                                <span class="shift-time"><%= shift.start_time.substring(0,2) %></span> <span class="shift-position"><%= shift.required_position.substring(0,4) %>..</span> <span class="shift-employee">
+                                                    <% if (shift.assigned_employee && shift.assigned_employee.name) { %>
+                                                        <%= shift.assigned_employee.name.split(' ')[0] %> <%# First name only %>
+                                                    <% } else { %>
+                                                        <span class="unassigned">Needed</span>
+                                                    <% } %>
+                                                </span>
+                                                <span class="shift-cost"> ($<%= shift.cost %>)</span>
+                                            </div>
+                                        <% }); %>
+                                    <% } %>
+
+                                    <%# Display Daily Cost if > 0 %>
+                                    <% if (day.dailyTotalCost > 0) { %>
+                                         <span class="daily-cost-cal">Cost: $<%= day.dailyTotalCost %></span>
+                                    <% } %>
+                                </td>
+                            <% }); %>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        <% } else { %>
+            <p>No schedule data found for <%= viewMonthStr %>. Please generate the schedule first.</p>
+        <% } %>
+
+        <hr style="margin-top: 20px;">
+        <p><a href="/">Back to Home</a></p>
+        <p><a href="/admin/employees">Back to Employee Management</a></p>
+
+    </div> 
+
+</body>
+</html>
