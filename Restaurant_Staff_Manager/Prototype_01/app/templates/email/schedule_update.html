@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Your Upcoming Schedule</title>
+</head>
+<body>
+    <p>Hi {{ employee.name }},</p>
+
+    <p>Here is your generated work schedule for the upcoming period:</p>
+
+    {% if shifts %}
+        <ul>
+            {% for shift in shifts %}
+                <li>
+                    <strong>{{ shift.start_time.strftime('%a, %B %d, %Y') }}:</strong>
+                    {{ shift.start_time.strftime('%I:%M %p') }} - {{ shift.end_time.strftime('%I:%M %p') }}
+                    
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No shifts assigned for this period.</p>
+    {% endif %}
+
+    <p>If you have any questions, please contact your manager.</p>
+
+    <p>Thanks,<br>Pozole Restaurant Scheduling</p>
+</body>
+</html>

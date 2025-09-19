@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h2>Log Employee Performance</h2>
+
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+
+        <p>
+            {{ form.employee.label }}<br>
+            {{ form.employee(class_='form-control') }} 
+            {% if form.employee.errors %}
+                <br><span style="color: red;">[{{ ', '.join(form.employee.errors) }}]</span>
+            {% endif %}
+        </p>
+
+        <p>
+            {{ form.log_date.label }}<br>
+            {{ form.log_date(class_='form-control') }}
+            {% if form.log_date.errors %}
+                <br><span style="color: red;">[{{ ', '.join(form.log_date.errors) }}]</span>
+            {% endif %}
+        </p>
+
+        <p>
+            {{ form.rating.label }}<br>
+            {{ form.rating(class_='form-control', size=5, step='0.5') }}
+            {% if form.rating.errors %}
+                <br><span style="color: red;">[{{ ', '.join(form.rating.errors) }}]</span>
+            {% endif %}
+        </p>
+
+        <p>
+            {{ form.notes.label }}<br>
+            {{ form.notes(rows=4, cols=40, class_='form-control') }}
+            {% if form.notes.errors %}
+                <br><span style="color: red;">[{{ ', '.join(form.notes.errors) }}]</span>
+            {% endif %}
+        </p>
+
+        <p>{{ form.submit(class_='btn btn-primary') }}</p>
+    </form>
+
+    <hr>
+    <p><a href="{{ url_for('main.index') }}">Back to Home</a></p>
+
+{% endblock %}

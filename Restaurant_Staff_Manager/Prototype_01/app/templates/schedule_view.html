@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h2>Generated Schedule for {{ month_name }} (Grouped by Week)</h2>
+
+    {% if weekly_data %}
+        {% for week_start_date, shifts_in_week, weekly_total_cost in weekly_data %}
+            <h4 style="margin-top: 25px; margin-bottom: 5px;">
+                Week of: {{ week_start_date.strftime('%B %d, %Y') }}
+                 (Total Est. Cost: ${{ "%.2f"|format(weekly_total_cost) }})
+            </h4>
+
+            <table class="schedule-table" border="1" style="border-collapse: collapse; width: 100%; margin-bottom: 20px;">
+                <thead>
+                    <tr style="background-color: #f2f2f2;">
+                        <th style="padding: 8px; width: 12%;">Start Time</th>
+                        <th style="padding: 8px; width: 12%;">End Time</th>
+                        <th style="padding: 8px;">Employee</th>
+                        <th style="padding: 8px;">Position</th>
+                        <th style="padding: 8px; width: 12%;">Est. Cost</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for shift in shifts_in_week %}
+                        {% if loop.first or loop.previtem.start_time.date() != shift.start_time.date() %}
+                        <tr class="day-header">
+                            <td colspan="5" style="background-color: #e9ecef; font-weight: bold; padding: 6px 12px; border-top: 2px solid #adb5bd;">
+                                {{ shift.start_time.strftime('%Y-%m-%d (%A)') }} 
+                            </td>
+                        </tr>
+                        {% endif %}
+
+                        {% set shift_class = 'shift-day' if shift.start_time.hour < 14 else 'shift-eve' %}
+                        <tr class="{{ shift_class }} {{ 'unassigned-shift' if not shift.employee }}">
+
+                            <td style="padding: 8px;">{{ shift.start_time.strftime('%I:%M %p') }}</td> 
+                            <td style="padding: 8px;">{{ shift.end_time.strftime('%I:%M %p') }}</td> 
+                            <td style="padding: 8px;">
+                                {% if shift.employee %} {{ shift.employee.name }}
+                                {% else %} <strong class="unassigned-text">-- Unassigned --</strong>
+                                {% endif %}
+                            </td>
+
+                            <td style="padding: 8px;">
+                                {% if shift.employee %} {{ shift.employee.position }}
+                                {% else %} ({{ shift.required_position }})
+                                {% endif %}
+                            </td>
+
+                            <td style="padding: 8px; text-align: right;">
+                                {% if shift.employee and shift.employee.hourly_rate %}
+                                    {% set duration_hours = (shift.end_time - shift.start_time).total_seconds() / 3600 %}
+                                    ${{ "%.2f"|format(duration_hours * shift.employee.hourly_rate) }}
+                                {% else %}
+                                     $0.00
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %} 
+                </tbody>
+
+                 <tfoot>
+                    <tr style="font-weight: bold; background-color: #f9f9f9;">
+                        <td colspan="4" style="padding: 8px; text-align: right;">Week Total:</td>
+                        <td style="padding: 8px; text-align: right;">${{ "%.2f"|format(weekly_total_cost) }}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        {% endfor %} 
+
+        <h3 style="text-align: right; margin-top: 20px;">
+            Grand Total Estimated Cost (for {{ month_name }}): ${{ "%.2f"|format(grand_total_cost) }}
+        </h3>
+
+    {% else %}
+        <p style="margin-top: 15px;">No shifts found in the schedule for {{ month_name }}.</p>
+        <p>Try <a href="{{ url_for('main.generate_schedule_route') }}">generating the schedule</a> for the current month first.</p>
+    {% endif %}
+
+    <hr style="margin-top: 20px;">
+    <p><a href="{{ url_for('main.index') }}">Back to Home</a></p>
+    <p><a href="{{ url_for('main.generate_schedule_route') }}">Re-generate Schedule for Current Month</a></p>
+
+{% endblock %}

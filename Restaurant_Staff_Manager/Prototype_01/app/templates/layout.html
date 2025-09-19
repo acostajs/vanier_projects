@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+  <head>
+    <title>{{ title }} - Pozole Scheduler</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  </head>
+  <body>
+
+    <nav class="navbar">
+      <ul>
+          <li><a href="{{ url_for('main.index') }}">Home</a></li>
+          <li><a href="{{ url_for('main.schedule_view') }}">View Schedule</a></li>
+          <li><a href="{{ url_for('admin.performance_dashboard') }}">Performance Dashboard</a></li>
+          <li><a href="{{ url_for('admin.add_performance_log') }}">Log Performance</a></li>
+          <li><a href="{{ url_for('admin.list_employees') }}">Manage Employees</a></li>
+      </ul>
+  </nav>
+
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div> 
+          {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <div class="content-wrapper">
+        {% block content %}{% endblock %} 
+    </div>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+services:
+  web:
+    build: . 
+    ports:
+      - "5001:5001" 
+    volumes:
+      - .:/app
+      - ./instance:/app/instance
+    env_file:
+      - .env 
+    environment:
+      - FLASK_DEBUG=1 

@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h2>Performance Dashboard</h2>
+
+    {% if logs %}
+        <table border="1" style="border-collapse: collapse; width: 100%; margin-top: 15px;">
+            <thead>
+                <tr style="background-color: #f2f2f2;">
+                    <th style="padding: 8px;">Date</th>
+                    <th style="padding: 8px;">Employee</th>
+                    <th style="padding: 8px; text-align: center;">Rating</th>
+                    <th style="padding: 8px;">Notes</th>
+                    <th style="padding: 8px;">Logged At (UTC)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in logs %}
+                    <tr>
+                        <td style="padding: 8px;">{{ log.log_date.strftime('%Y-%m-%d') }}</td>
+                        <td style="padding: 8px;">{{ log.employee.name if log.employee else 'N/A' }}</td>
+                        <td style="padding: 8px; text-align: center;">{{ log.rating|default('-', true) }}</td>
+                        <td style="padding: 8px;">{{ log.notes|default('', true) }}</td>
+                        <td style="padding: 8px;">{{ log.recorded_at.strftime('%Y-%m-%d %H:%M') if log.recorded_at else '-' }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p style="margin-top: 15px;">No performance logs have been recorded yet.</p>
+        <p>You can <a href="{{ url_for('admin.add_performance_log') }}">add a performance log here</a>.</p>
+    {% endif %}
+
+    <hr style="margin-top: 20px;">
+    <p><a href="{{ url_for('main.index') }}">Back to Home</a></p>
+    <p><a href="{{ url_for('admin.add_performance_log') }}">Add Performance Log</a></p>
+
+{% endblock %}

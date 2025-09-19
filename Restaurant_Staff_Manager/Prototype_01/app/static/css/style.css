@@ -1,0 +1,231 @@
+/* --- Basic Reset / Body Style --- */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
+    line-height: 1.6;
+    background-color: #f8f9fa; 
+    color: #212529; 
+}
+
+/* --- Navigation Bar --- */
+.navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #343a40; 
+    border-bottom: 3px solid #ffc107; 
+}
+
+.navbar li {
+    float: left;
+}
+
+.navbar li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    transition: background-color 0.3s ease; 
+}
+
+.navbar li a:hover {
+    background-color: #495057; 
+    color: #ffc107; 
+}
+
+/* --- Content Wrapper --- */
+.content-wrapper {
+    padding: 25px; 
+    max-width: 1200px; 
+    margin: 30px auto; 
+    background-color: #ffffff; 
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1); 
+    border-radius: 8px; 
+}
+
+/* --- Headings --- */
+h1, h2, h3, h4 {
+    color: #495057; 
+    margin-top: 1.2em;
+    margin-bottom: 0.6em;
+    line-height: 1.3;
+}
+h1 { font-size: 2.2em; } 
+h2 { font-size: 1.8em; border-bottom: 1px solid #dee2e6; padding-bottom: 0.4em; margin-bottom: 1em;} 
+h3 { font-size: 1.5em; }
+h4 { font-size: 1.2em; color: #6c757d; } 
+
+
+/* --- Links --- */
+a {
+    color: #007bff; 
+    text-decoration: none;
+}
+a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* --- Tables --- */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #dee2e6;
+    font-size: 0.95em; 
+}
+
+th, td {
+    border: 1px solid #dee2e6;
+    padding: 10px 14px; 
+    text-align: left;
+    vertical-align: top;
+}
+
+thead th {
+    background-color: #e9ecef; 
+    font-weight: 600; 
+    border-bottom-width: 2px;
+}
+
+tbody tr:nth-child(even) { 
+    background-color: #f8f9fa; 
+}
+
+tbody tr:hover { 
+    background-color: #e9ecef;
+}
+
+tfoot {
+    font-weight: bold;
+    background-color: #e9ecef;
+}
+td[style*="text-align: right;"] { 
+    text-align: right;
+}
+td[style*="text-align: center;"] { 
+    text-align: center;
+}
+
+
+/* --- Forms --- */
+form p { margin-bottom: 1rem; }
+form label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
+input[type="text"],
+input[type="email"],
+input[type="date"],
+input[type="number"],
+input[type="password"], 
+select,
+textarea {
+    display: block; 
+    width: 100%; 
+    max-width: 450px; 
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+input:focus, select:focus, textarea:focus { 
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+textarea { resize: vertical; }
+
+/* --- Buttons --- */
+input[type="submit"],
+.btn {
+    display: inline-block;
+    font-weight: 400;
+    color: #fff;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    background-color: #007bff;
+    border: 1px solid #007bff;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    text-decoration: none;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+input[type="submit"]:hover,
+.btn:hover {
+    color: #fff;
+    background-color: #0056b3;
+    border-color: #004085;
+    text-decoration: none;
+}
+
+/* --- Flash Messages --- */
+.flash {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+    font-weight: 500;
+}
+.flash.success {
+    color: #0f5132;
+    background-color: #d1e7dd;
+    border-color: #badbcc;
+}
+.flash.danger {
+    color: #842029;
+    background-color: #f8d7da;
+    border-color: #f5c2c7;
+}
+
+/* --- Validation Errors --- */
+span[style*="color: red;"] { 
+    font-size: 0.875em;
+    font-weight: bold;
+    color: #dc3545 !important; 
+    display: block; 
+    margin-top: 0.25rem;
+}
+
+/* Schedule View Specific Enhancements */
+.schedule-table tbody tr:hover {
+    background-color: #d1ecf1; 
+}
+
+.day-header td {
+    letter-spacing: 0.5px;
+}
+
+.shift-day {
+    background-color: #fdfdfe;
+}
+
+.shift-eve {
+    background-color: #f8f9fa; 
+}
+
+tbody tr.shift-eve:nth-child(odd) {
+    background-color: #f0f1f2; 
+}
+
+.unassigned-text {
+    font-weight: bold;
+    color: #fd7e14; 
+    font-style: italic;
+}
+
+tr.unassigned-shift td:nth-child(4) { 
+     font-style: italic;
+     color: #6c757d;
+}

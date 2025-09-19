@@ -1,0 +1,45 @@
+{% extends "layout.html" %} 
+
+{% block content %}
+    <h2>{{ title }}</h2> 
+
+
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+
+        <p>
+            {{ form.name.label }}<br>
+            {{ form.name(size=40, class_='form-control') }} 
+            {% if form.name.errors %}
+                <br><span style="color: red;">[{{ ', '.join(form.name.errors) }}]</span>
+            {% endif %}
+        </p>
+        <p>
+            {{ form.position.label }}<br>
+            {{ form.position(size=40, class_='form-control') }}
+            {% if form.position.errors %}
+                <br><span style="color: red;">[{{ ', '.join(form.position.errors) }}]</span>
+            {% endif %}
+        </p>
+        <p>
+            {{ form.email.label }}<br>
+            {{ form.email(size=40, class_='form-control') }}
+            {% if form.email.errors %}
+                <br><span style="color: red;">[{{ ', '.join(form.email.errors) }}]</span>
+            {% endif %}
+        </p>
+        <p>
+            {{ form.hourly_rate.label }}<br>
+            {{ form.hourly_rate(class_='form-control', size=10, step='0.01') }}
+            {% if form.hourly_rate.errors %}
+                <br><span style="color: red;">[{{ ', '.join(form.hourly_rate.errors) }}]</span>
+            {% endif %}
+        </p>
+        <p>{{ form.submit(class_='btn btn-primary') }}</p> 
+    </form>
+
+    <hr>
+    <p><a href="{{ url_for('main.index') }}">Back to Home</a></p>
+    <p><a href="{{ url_for('admin.list_employees') }}">Back to Employee List</a></p> 
+
+{% endblock %}

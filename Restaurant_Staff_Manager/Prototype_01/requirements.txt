@@ -1,0 +1,16 @@
+Flask
+Flask-SQLAlchemy
+Flask-WTF
+email-validator
+WTForms-SQLAlchemy 
+python-dotenv
+Flask-Mail
+gunicorn  
+psycopg2-binary
+
+# AI Forecasting & Data Handling
+pandas
+prophet
+
+
+
